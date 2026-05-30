@@ -5,7 +5,7 @@ int main (void)
 {
 	int x, y;
 	
-	printf("µÎ Á¤¼ö¸¦ ÀÔ·ÂÇÏ¼¼¿ä.\n");
+	printf("ë‘ ì •ìˆ˜ë¥¼ ì…ë ¥í•˜ì„¸ìš”.\n");
 	scanf("%d %d", &x, &y);
 	
 	printf("%d + %d = %d\n", x, y, x+y);
