@@ -11,15 +11,15 @@ int main (void)
 	x = 5;
 	y = 10;
 	
-	sum = x+y; //´õÇÏ±â
-	diff = x-y; //•û±â
-	mull = x*y; //°öÇÏ±â
-	div = x/y; //³ª´©±â
+	sum = x+y; //ë”í•˜ê¸°
+	diff = x-y; //ë¹¼ê¸°
+	mull = x*y; //ê³±í•˜ê¸°
+	div = x/y; //ë‚˜ëˆ„ê¸°
 	
-	printf("µÎ ¼öÀÇ ÇÕÀº : %d\n", sum);
-	printf("µÎ ¼öÀÇ »©±â´Â  : %d\n", diff);
-	printf("µÎ ¼öÀÇ °öÀº : %d\n", mull);
-	printf("µÎ ¼öÀÇ ³ª´©±â´Â :%d\n", div);     
+	printf("ë‘ ìˆ˜ì˜ í•©ì€ : %d\n", sum);
+	printf("ë‘ ìˆ˜ì˜ ë¹¼ê¸°ëŠ”  : %d\n", diff);
+	printf("ë‘ ìˆ˜ì˜ ê³±ì€ : %d\n", mull);
+	printf("ë‘ ìˆ˜ì˜ ë‚˜ëˆ„ê¸°ëŠ” :%d\n", div);     
 	
 	
 	return 0;
