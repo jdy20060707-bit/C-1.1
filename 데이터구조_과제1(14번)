@@ -1,0 +1,179 @@
+#include <stdio.h>
+#define MAX_DEGREE 1001
+
+typedef struct {
+    int degree;
+    float coef[MAX_DEGREE];
+} Polynomial;
+
+
+// 다항식 p의 차수 반환
+int degree(Polynomial p)
+{
+    return p.degree;
+}
+
+
+// 지수가 i인 항의 계수 반환
+float coefficient(Polynomial p, int i)
+{
+    return p.coef[i];
+}
+
+
+// 미지수 x를 대입해 계산 결과 반환
+float evaluate(Polynomial p, float x)
+{
+    float result = p.coef[0];
+    float mul = 1;
+
+    for (int i = 1; i <= p.degree; i++) {
+        mul *= x;
+        result += p.coef[i] * mul;
+    }
+
+    return result;
+}
+
+
+// 다항식 a와 b의 합 반환
+Polynomial add(Polynomial a, Polynomial b)
+{
+    Polynomial p;
+
+    p.degree = (a.degree > b.degree) ? a.degree : b.degree;
+
+    for (int i = 0; i <= p.degree; i++) {
+        p.coef[i] = ((i <= a.degree) ? a.coef[i] : 0)
+                  + ((i <= b.degree) ? b.coef[i] : 0);
+    }
+
+    return p;
+}
+
+
+// -p를 구해 반환
+Polynomial negate(Polynomial p)
+{
+    for (int i = 0; i <= p.degree; i++) {
+        p.coef[i] = -p.coef[i];
+    }
+
+    return p;
+}
+
+
+// a-b를 구해 반환
+Polynomial sub(Polynomial a, Polynomial b)
+{
+    return add(a, negate(b));
+}
+
+
+// 두 다항식의 곱을 구해 반환
+Polynomial mult(Polynomial a, Polynomial b)
+{
+    Polynomial p;
+
+    p.degree = a.degree + b.degree;
+
+    // 모두 0으로 초기화
+    for (int i = 0; i <= p.degree; i++) {
+        p.coef[i] = 0;
+    }
+
+    // 다항식 곱셈
+	for (int i = 0; i <= a.degree; i++) {
+        for (int j = 0; j <= b.degree; j++) {
+            p.coef[i + j] += a.coef[i] * b.coef[j];
+        }
+    }
+
+    return p;
+}
+
+
+// 다항식 정리. 최고차항의 차수 수정
+void trim(Polynomial *p)
+{
+    while (p->degree > 0 && p->coef[p->degree] == 0) {
+        p->degree--;
+    }
+}
+
+
+// 다항식을 화면에 보기 좋게 출력
+void print_poly(Polynomial p, char str[])
+{
+    printf("%s", str);
+
+    int first = 1;
+
+    for (int i = p.degree; i >= 0; i--) {
+
+        if (p.coef[i] == 0)
+            continue;
+
+        // 첫 번째 항이 아닌 경우 + 또는 - 출력
+        if (!first) {
+            if (p.coef[i] > 0)
+                printf(" + ");
+            else
+                printf(" - ");
+        }
+        else {
+            // 첫 번째 항이 음수인 경우
+            if (p.coef[i] < 0)
+                printf("-");
+        }
+
+        // 계수의 절댓값
+        float coef = p.coef[i];
+
+        if (coef < 0)
+            coef = -coef;
+
+        // 상수
+        if (i == 0) {
+            printf("%.1f", coef);
+        }
+
+        // x가 포함된 항
+        else {
+            if (coef != 1)
+                printf("%.1f ", coef);
+
+            printf("x^%d", i);
+        }
+
+        first = 0;
+    }
+
+    // 모든 계수가 0인 경우
+    if (first)
+        printf("0");
+
+    printf("\n");
+}
+
+
+int main()
+{
+    Polynomial a = { 5, { 3, 6, 0, 0, 0, 10 } };
+    Polynomial b = { 4, { 7, 0, 5, 0, 1 } };
+
+    Polynomial c = add(a, b);
+    Polynomial d = sub(a, b);
+    Polynomial e = mult(a, b);
+
+    print_poly(a, "A = ");
+    print_poly(b, "B = ");
+    print_poly(c, "A+B = ");
+    print_poly(d, "A-B = ");
+    print_poly(e, "A*B = ");
+
+    printf("A(1) = %f\n", evaluate(a, 1.0f));
+    printf("B(2) = %f\n", evaluate(b, 2.0f));
+
+    return 0;
+}
