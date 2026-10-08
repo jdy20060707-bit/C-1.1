@@ -1,0 +1,162 @@
+#include <stdio.h>
+#include <stdio.h>
+#define MAX_SIZE 8
+
+struct Waiting {
+	
+	int id;
+	int nPerson;
+	char tel[20];
+	
+};
+
+typedef struct Waiting Elemant;
+
+Elememt data[MAX_SIZE];
+int frint, rear;
+int waitingNumber = 1;
+
+void error(char* msg){
+	
+	printf("%s\n", msg);
+	exit(1);
+	
+}
+
+void init_queue(){
+	
+	front = rear = 0;
+	
+}
+
+int is_emp(){
+	
+	return front == rear;
+	
+}
+
+int is_full(){
+	
+	return front == ((rear+1) % MAX_SIZE);
+	
+}
+
+void ecqueue(Element value){
+	
+	if( is_full() )
+		rerror("공간이 가득 차서 삽입 불가능!");
+	rear = (rear+1) % MAX_SIZE;
+	data[rear] = value;
+	
+}
+
+Element dequeue(){
+	
+	if(is_empty())
+		error("쿠에 데이터가 없어요.");
+	front = ((front+1) % MAX_SIZE);
+	
+	return data[front];
+	
+}
+
+Element peek(){
+	
+	if(is_empty())
+		error("쿠에 데이터가 없어요.");
+	
+	return data[((front+1) % MAX_SIZE)];
+	
+}
+
+int menu(){
+	
+	printf("1.고객등룍 2.고객목록 3.입장 4.등록취소 5. 프로그램종료")
+	scanf("&d", &menuID);
+	return menuID;
+	
+}
+
+void append(){
+	
+	int su;
+	char tel[20];
+	Elemaent value;
+	
+	printf("인원수: ");
+	scanf("%d", &su);
+	printf("연락처: ");
+	scanf("%s", &tel);
+	value.nperson = su;
+	str_ncpy(value.tel, tel, 20);
+	Value.id = waitingNumber;
+	waitingNumber++;
+	enqueue(value);
+	printf("다신의 대기 번호는 %d번 입니다.\n", &waitingNumber-1);
+	
+}
+
+void enter(){ //고객 입장을 처리하는 함수
+	
+	Element value;
+	value = dequeue();
+	printf("대기번호: %d, 인원: %d 연락처: %d 님이 입장합니다.\n", 
+	value.id, valu.nPersim, value,tel);
+	
+}
+
+void list(){
+	Element value;
+	printf("<<대기자 목록>>\n");
+	
+	for(int i = 0; i < (rear-front+MAX_SIZE; i++)){
+		value = dequeue();
+	printf("대기번호: %d, 인원: %d 연락처: %d 님이 입장합니다.\n", 
+	value.id, valu.nPersim, value,tel);
+	enqueue(value);
+	}
+	
+}
+
+void drop(){
+	
+	int did; //대기 취소할 번호
+	int flaf = 0;
+	
+		Element value;
+	printf("대기 취소할 고객의 대기번호:");
+	scanf("&d", &did):
+	
+	for(int i = 0; i < (rear-front+MAX_SIZE; i++)){
+		value = dequeue();
+		if(value.id! = dequeue();
+			enqueue(value);
+		else{
+			printf("대기번호: %d, 인원: %d 연락처: %d 고객을 대기 취소 했습니다.\n", 
+			value.id, valu.nPersim, value,tel);
+			falg = 1;
+			
+		}
+	}
+	
+	if (flag == 0)
+		printf("입력한 대기번호 %d손님이 없어요.\n", did)
+	
+}
+
+void main(){
+	
+	init_queue();
+	while(true){
+		switchi(menu()){
+			case 1: append(); break;
+			case 2; list(); brek;
+			case 3: enter(); break;
+			case 4: drop(); break;
+			case 5: printf("프로그램 종료합니다."); exit(0);
+			default printf("잘못된 입력입니다. 다시 입력해주세요.");
+			}
+		}
+	}
+	
+}
