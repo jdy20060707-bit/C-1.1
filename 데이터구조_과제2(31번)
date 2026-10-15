@@ -1,44 +1,116 @@
 #include <stdio.h>
-#include <stdio.h>
+#include <stdlib.h>
+
+#ifndef _MSC_VER
+#define fopen_s(pfp, name, mode) ((*(pfp) = fopen((name), (mode))) == NULL)
+#endif
 
 #define MAX_SIZE 100
-type char Element;
-#include "Arraystack.h"
 
-int check_maching(char expr[])
+typedef char Element;
+
+Element data[MAX_SIZE];
+int top;
+
+void error(char str[])
 {
-    int i = 0, prev;
-
-    intit_stack();
-    while (expr[i] != '\0') {
-        char ch = expr[i++];
-        if (ch == '[' || ch == '{')
-            push(ch);
-        else if (ch == ']' || ch == ')' || ch == '}') {
-            if (is_empty())
-                return 2; //조건 2 위반
-            
-            prev = pop();
-            if ((ch == ']' && prev != '[')
-            || (ch == ')' && prev != '(')
-            || (ch == '{' && prev != '}'))
-                return 3; //조건 3 위반
-        }
-    }
-    if (!is_empty()) return 1; //조건 1 위반
-    else return 0; //괄호 정상
+    printf("%s\n", str);
+    exit(1);
 }
 
-void main()
+void init_stack() { top = -1; }
+int is_empty()    { return (top == -1); }
+int is_full()     { return (top == (MAX_SIZE - 1)); }
+
+void push(Element e)
 {
-    chra expr[4][80] = {
-        "{A[(i+1)]=0;}",
-        "if((i=0) && (j==0)",
-        "whiel(n<8){n++;}",
-        "arr[(i+1]) = 0;]"};
-    for (int i = 0; i<4; i++){
-        int errCode = check_matching(expr[i]);
-        if (errCode == 0) printf("%-20s -> 정상\n", expr[i]);
-        else printf("%-20s -> 오류(조건%d 위반)\n" expr[i], errCode);
+    if (is_full()) error("Overflow Error!");
+    else data[++top] = e;
+}
+
+Element pop()
+{
+    if (is_empty()) error("Underflow Error!");
+    return data[top--];
+}
+
+Element peek()
+{
+    if (is_empty()) error("Underflow Error!");
+    return data[top];
+}
+
+//----------
+
+int check_matching(char filename[])
+{
+    FILE* fp;
+    int ch, next;
+    int quote;  // 현재 문자(열) 리터럴을 연 따옴표 (39 또는 34)
+    int last;   // 직전 문자 (/* */ 종료 검사용)
+    char prev;
+
+    if (fopen_s(&fp, filename, "r") != 0) {
+        return -1;
     }
+
+    init_stack();
+    while ((ch = getc(fp)) != EOF) {
+
+        // (5) 주석 처리
+        if (ch == '/') {
+            next = getc(fp);
+            if (next == '/') {  // 한 줄 주석: 줄바꿈까지 무시
+                while ((ch = getc(fp)) != EOF && ch != '\n');
+                    
+            }
+            else if (next == '*') { // 여러 줄 주석: 처음 */ 까지 무시
+                last = 0;
+                while ((ch = getc(fp)) != EOF) {
+                    if (last == '*' && ch == '/') break;
+                    last = ch;
+                }
+            }
+            else {
+                ungetc(next, fp);   // 주석이 아니면 한 글자 되돌림
+            }
+        }
+
+        else if (ch == 39 || ch == 34) {
+            quote = ch;
+            while ((ch = getc(fp)) != EOF && ch != quote) {
+                if (ch == '\\')
+                    getc(fp);
+            }
+        }
+
+        // 괄호 검사
+        else if (ch == '[' || ch == '(' || ch == '{') {
+            push(ch);
+        }
+        else if (ch == ']' || ch == ')' || ch == '}') {
+            if (is_empty()) { fclose(fp); return 2; }
+            prev = pop();
+            if ((ch == ']' && prev != '[') ||
+                (ch == ')' && prev != '(') ||
+                (ch == '}' && prev != '{')) {
+                fclose(fp);
+                return 3;
+            }
+        }
+    }
+    fclose(fp);
+
+    if (!is_empty()) return 1;
+    return 0;
+}
+
+int main(int argc, char* argv[])
+{
+    char* filename = (argc > 1) ? argv[1] : "test.txt";
+    int err = check_matching(filename);
+
+    if (err == 0) printf("%s: 괄호 검사 성공\n", filename);
+    else printf("%s: 괄호 검사 실패 (에러코드 %d)\n", filename, err);
+    return 0;
 }
