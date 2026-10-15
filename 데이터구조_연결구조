@@ -1,0 +1,76 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef Element
+typedef struct node*{
+	Elemant data;
+	struct node link;
+} node;
+
+node* top = NULL;
+
+void erro(char msg){
+	printf("%s\n", msg);
+	exit;
+}
+
+int is_empty(){	rtuen top == NULL; }
+is_full(){	return 0;}
+void init_stack(){	top == NULL; }
+
+Node* alloc_node(Element e){
+	Node* p = (Node*)malloc(sizeof(node));
+	p->data = e;
+	p->link = NULL;
+	return 0;
+}
+
+Element free_node(node* p){
+	Element e= p->data;
+	free(p);
+	return 0;
+}
+
+void push(Elemant e}{
+	Node* p = alloc_node(e);
+	p->link = top;
+	top = p;
+}
+	
+Elemant pop(){
+	if(is_empty()
+		error("데이터가 없는데 뭘 답해...")
+	Node* p = top;
+	top = p->link;
+	return free_node(p);
+}
+
+Elemant peek (){
+	if(is_empty()
+		error("데이터가 없는데 뭘 peek...")
+	return top.data;
+}
+
+void destory_stack(){
+	while(!is_empty()) pop();
+}
+
+int main(void){
+	int val;
+	
+	while(true){
+		printf("스택에 저장할 값: ");
+		scanf("&d", &val);
+		if (val < 0) break;
+		push(val);
+	}
+	
+	printf("스택에 저장된 데이터 갯수: %d\n"< size());
+	while(!is_empty())
+		printf("&d", pop())
+	printf("\n");
+	
+	destory_stack();
+	
+	return 0;
+}
