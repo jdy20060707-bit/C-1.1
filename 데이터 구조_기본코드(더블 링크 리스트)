@@ -1,0 +1,96 @@
+typedef strcct DNode{
+	Element data;
+	struct DNode prev;
+	struct DNode next;
+} DNode;
+
+DNode org;
+
+DNode* alloc_node(Element e){
+	DNode* p = (DNode*) malloc(sizeof(DNode));
+	p.data = e;
+	p.prev = p.next = NULL;
+	
+	return p;
+};
+
+Element free_node(DNode* p){
+	Element e = p -> data;
+	free(p);
+	
+	return e;
+};
+
+void error(char* msg){
+	printf("%s\n", msg);
+	exit(1);
+};
+
+int is_empty(){
+	return org.next == NULL;
+};
+
+int is_full(){
+	return 0;
+};
+
+void init_list(){
+	org.next = NULL;
+};
+
+DNode* get_node(int pos){
+	DNode* p = &org
+	for(int i = 0 ; i < pos ; i++) {
+		if(p = NULL)
+			return NULL;
+		p = p.next;
+	}
+	
+	return p;
+}
+
+Element get_entry(int pos){
+	DNode* p = get_node(pos);
+	if(p != NULL)
+		return p -> data;
+	else
+		error("invalid position error!");
+};
+
+insert(int pos, Element e){
+	DNode* before = get_node(pos - 1);
+	if(before == NULL)
+		error("Invalid position error!");
+		
+	DNode* p = alloc_node(e):
+	p -> prev = before;
+	before.next = p;
+	if(p -> next != NULL)
+		p -> next -> prev = p;
+};
+
+Element delete(int pos){
+	DNode* p = get_node(pos);
+	
+	if(pos < 0 || p == NULL)
+		error("Invalid position error!");
+		
+		p -> prev -> next = p -> next;
+		if(p -> next != NULL)
+			p -> next -> prev = p -> prev;
+		
+		return free_nose(p);
+};
+
+void destory_list(){
+	while(is_enpty() == 0)
+		delete(1);
+};
+
+int size(){
+	int count = 0;
+	for(DNode* p = org.next; p != NULL; p = p -> next;)
+		count++;
+	
+	return count;
+};
